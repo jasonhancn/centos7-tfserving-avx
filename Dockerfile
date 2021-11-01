@@ -14,7 +14,7 @@ RUN ./bazel-$BAZEL_VERSION-installer-linux-x86_64.sh --user
 ENV TF_SERVING_BUILD_OPTIONS="-c opt --copt=-avx"
 RUN git clone https://github.com/tensorflow/serving -b r1.15
 WORKDIR /serving
-ENV PYTHON_BIN_PATH="/bin/python3"
+ENV PYTHON_BIN_PATH="/bin/python3" BAZEL_PYTHON="/bin/python3"
 RUN source ~/.venv/bin/activate && ~/.bazel/bin/bazel build --color=yes --curses=yes \
      --verbose_failures \
      --output_filter=DONT_MATCH_ANYTHING \
