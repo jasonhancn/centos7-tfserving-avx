@@ -14,7 +14,7 @@ on:
       - '**/README.md'
 
 env:
-  IMAGE_NAME: centos7-tfserving
+  IMAGE_NAME: centos7-tfserving_1.15-avx
 
 jobs:
   image:
