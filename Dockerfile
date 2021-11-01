@@ -9,7 +9,7 @@ RUN wget https://github.com/bazelbuild/bazel/releases/download/$BAZEL_VERSION/ba
 RUN chmod u+x bazel-$BAZEL_VERSION-installer-linux-x86_64.sh
 RUN ./bazel-$BAZEL_VERSION-installer-linux-x86_64.sh --user
 
-ENV TF_SERVING_BUILD_OPTIONS="--config=opt --copt=-mssse3 --copt=-msse4.1 --copt=-msse4.2 --copt=-avx"
+ENV TF_SERVING_BUILD_OPTIONS="-c opt --copt=-avx"
 RUN git clone https://github.com/tensorflow/serving -b r1.15
 WORKDIR /serving
 RUN ~/.bazel/bin/bazel build --color=yes --curses=yes \
