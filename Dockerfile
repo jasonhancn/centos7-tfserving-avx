@@ -1,7 +1,9 @@
 FROM centos:7 AS builder
 RUN yum -y install epel-release
-RUN yum -y install python3-devel python3-setuptools java-1.8.0-openjdk-devel gcc gcc-c++ kernel-devel make automake autoconf swig which git wget zip unzip libtool binutils freetype-devel libpng12-devel zlib-devel giflib-devel zeromq3-devel
-RUN pip3 install "future==0.18.2" "grpcio==1.30.0" "h5py==3.1.0" "keras_applications==1.0.8" "keras_preprocessing==1.1.2" "mock==4.0.3" "numpy==1.19.5" "requests==2.26.0"
+RUN yum -y install python3-devel python3-virtualenv java-1.8.0-openjdk-devel gcc gcc-c++ kernel-devel make automake autoconf swig which git wget zip unzip libtool binutils freetype-devel libpng12-devel zlib-devel giflib-devel zeromq3-devel
+RUN python3 -m virtualenv ~/.venv
+RUN chmod +x ~/.venv/bin/activate
+RUN source ~/.venv/bin/activate && python3 -m pip install --no-cache-dir  "future==0.18.2" "grpcio==1.30.0" "h5py==3.1.0" "keras_applications==1.0.8" "keras_preprocessing==1.1.2" "mock==4.0.3" "numpy==1.19.5" "requests==2.26.0"
 
 RUN export PATH="$PATH:$HOME/bin"
 ENV BAZEL_VERSION=0.24.1
@@ -13,7 +15,7 @@ ENV TF_SERVING_BUILD_OPTIONS="-c opt --copt=-avx"
 RUN git clone https://github.com/tensorflow/serving -b r1.15
 WORKDIR /serving
 ENV PYTHON_BIN_PATH="/bin/python3"
-RUN ./configure && ~/.bazel/bin/bazel build --color=yes --curses=yes \
+RUN source ~/.venv/bin/activate && ~/.bazel/bin/bazel build --color=yes --curses=yes \
      --verbose_failures \
      --output_filter=DONT_MATCH_ANYTHING \
      ${TF_SERVING_BUILD_OPTIONS} \
