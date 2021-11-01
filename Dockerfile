@@ -13,7 +13,7 @@ ENV TF_SERVING_BUILD_OPTIONS="-c opt --copt=-avx"
 RUN git clone https://github.com/tensorflow/serving -b r1.15
 WORKDIR /serving
 ENV PYTHON_BIN_PATH="/bin/python3"
-RUN ~/.bazel/bin/bazel build --color=yes --curses=yes \
+RUN ./configure && ~/.bazel/bin/bazel build --color=yes --curses=yes \
      --verbose_failures \
      --output_filter=DONT_MATCH_ANYTHING \
      ${TF_SERVING_BUILD_OPTIONS} \
