@@ -44,7 +44,7 @@ RUN yum update -y && \
     wget -c https://www.python.org/ftp/python/3.7.12/Python-3.7.12.tgz && \
     tar -zxf Python-3.7.12.tgz && \
     cd Python-3.7.12 && \
-    ./configure prefix=/opt/python37 --enable-optimizations && \
+    ./configure prefix=/opt/python37 && \
     make -j && make install && \
     cd .. && \
     rm -rf Python-3.7.12 Python-3.7.12.tgz && \
