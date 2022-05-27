@@ -39,8 +39,6 @@ RUN yum install -y centos-release-scl && yum update -y && yum install -y \
     yum clean all && \
     rm -rf /var/lib/apt/lists/*
 
-RUN scl enable devtoolset-9 bash
-
 # Install python 3.7
 RUN yum update -y && \
     yum install -y wget gcc make zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel libffi-devel  && \
@@ -98,8 +96,7 @@ RUN echo "Building with Bazel options: ${TF_SERVING_BAZEL_OPTIONS}"
 
 # Added BAZEL_LINKLIBS=-l%:libstdc++.a due to the issue explained here: https://github.com/tensorflow/serving/issues/1563
 RUN source /opt/rh/devtoolset-9/enable && \
-    BAZEL_LINKLIBS=-l%:libstdc++.a && \
-    bazel build --color=yes --curses=yes \
+    BAZEL_LINKLIBS=-l%:libstdc++.a bazel build --color=yes --curses=yes \
     ${TF_SERVING_BAZEL_OPTIONS} \
     --verbose_failures \
     --output_filter=DONT_MATCH_ANYTHING \
@@ -110,8 +107,7 @@ RUN source /opt/rh/devtoolset-9/enable && \
 
 # Build and install TensorFlow Serving API
 RUN source /opt/rh/devtoolset-9/enable && \
-    BAZEL_LINKLIBS=-l%:libstdc++.a && \
-    bazel build --color=yes --curses=yes \
+    BAZEL_LINKLIBS=-l%:libstdc++.a bazel build --color=yes --curses=yes \
     ${TF_SERVING_BAZEL_OPTIONS} \
     --verbose_failures \
     --output_filter=DONT_MATCH_ANYTHING \
