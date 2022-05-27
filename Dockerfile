@@ -18,9 +18,9 @@ LABEL tensorflow_serving_github_commit=${TF_SERVING_VERSION_GIT_COMMIT}
 # Enable SCL CentOS 7 repo and install build packages
 RUN yum install -y centos-release-scl && yum update -y && yum install -y \
         which \
-        devtoolset-8-gcc \
-        devtoolset-8-gcc-c++ \
-        devtoolset-8-make \
+        devtoolset-9-gcc \
+        devtoolset-9-gcc-c++ \
+        devtoolset-9-make \
         patch \
         automake \
         ca-certificates \
@@ -44,6 +44,7 @@ RUN yum update -y && \
     wget -c https://www.python.org/ftp/python/3.7.12/Python-3.7.12.tgz && \
     tar -zxf Python-3.7.12.tgz && \
     cd Python-3.7.12 && \
+    source /opt/rh/devtoolset-9/enable && \
     ./configure prefix=/opt/python37 && \
     make -j && make install && \
     cd .. && \
@@ -93,7 +94,7 @@ ARG TF_SERVING_BAZEL_OPTIONS="--copt=-msse4.1 --copt=-msse4.2 --copt=-mavx"
 RUN echo "Building with Bazel options: ${TF_SERVING_BAZEL_OPTIONS}"
 
 # Added BAZEL_LINKLIBS=-l%:libstdc++.a due to the issue explained here: https://github.com/tensorflow/serving/issues/1563
-RUN source /opt/rh/devtoolset-8/enable && \
+RUN source /opt/rh/devtoolset-9/enable && \
     BAZEL_LINKLIBS=-l%:libstdc++.a && \
     bazel build --color=yes --curses=yes \
     ${TF_SERVING_BAZEL_OPTIONS} \
@@ -105,7 +106,7 @@ RUN source /opt/rh/devtoolset-8/enable && \
     /usr/local/bin/
 
 # Build and install TensorFlow Serving API
-RUN source /opt/rh/devtoolset-8/enable && \
+RUN source /opt/rh/devtoolset-9/enable && \
     BAZEL_LINKLIBS=-l%:libstdc++.a && \
     bazel build --color=yes --curses=yes \
     ${TF_SERVING_BAZEL_OPTIONS} \
