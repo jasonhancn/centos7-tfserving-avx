@@ -38,12 +38,6 @@ RUN yum install -y centos-release-scl && yum update -y && yum install -y \
     yum clean all && \
     rm -rf /var/lib/apt/lists/*
 
-RUN yum update && yum install -y \
-    python3.6 python3.6-devel python3-pip python3.6-venv && \
-    rm -rf /var/lib/apt/lists/* && \
-    python3.6 -m pip install pip --upgrade && \
-    update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 0
-
 # Install python 3.7
 RUN yum update -y && \
     yum install -y wget gcc make zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel libffi-devel  && \
