@@ -20,6 +20,7 @@ RUN yum install -y centos-release-scl && yum update -y && yum install -y \
         which \
         devtoolset-9-gcc \
         devtoolset-9-gcc-c++ \
+        devtoolset-9-libstdc++-devel \
         devtoolset-9-make \
         patch \
         automake \
@@ -37,6 +38,8 @@ RUN yum install -y centos-release-scl && yum update -y && yum install -y \
         python3-distutils&& \
     yum clean all && \
     rm -rf /var/lib/apt/lists/*
+
+RUN scl enable devtoolset-9 bash
 
 # Install python 3.7
 RUN yum update -y && \
@@ -87,7 +90,7 @@ WORKDIR /tensorflow-serving
 RUN curl -sSL --retry 5 https://github.com/tensorflow/serving/tarball/${TF_SERVING_VERSION_GIT_COMMIT} | tar --strip-components=1 -xzf -
 
 # Build, and install TensorFlow Serving
-ARG TF_SERVING_BUILD_OPTIONS="--config=release"
+ARG TF_SERVING_BUILD_OPTIONS="--config=release --jobs 16"
 RUN echo "Building with build options: ${TF_SERVING_BUILD_OPTIONS}"
 # Add Support for AVX (Support from SandyBridge)
 ARG TF_SERVING_BAZEL_OPTIONS="--copt=-msse4.1 --copt=-msse4.2 --copt=-mavx"
