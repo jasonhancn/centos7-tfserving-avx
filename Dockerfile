@@ -88,7 +88,7 @@ WORKDIR /tensorflow-serving
 RUN curl -sSL --retry 5 https://github.com/tensorflow/serving/tarball/${TF_SERVING_VERSION_GIT_COMMIT} | tar --strip-components=1 -xzf -
 
 # Build, and install TensorFlow Serving
-ARG TF_SERVING_BUILD_OPTIONS="--config=release --jobs 16"
+ARG TF_SERVING_BUILD_OPTIONS="--config=release"
 RUN echo "Building with build options: ${TF_SERVING_BUILD_OPTIONS}"
 # Add Support for AVX (Support from SandyBridge)
 ARG TF_SERVING_BAZEL_OPTIONS="--copt=-msse4.1 --copt=-msse4.2 --copt=-mavx"
