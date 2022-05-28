@@ -114,12 +114,9 @@ RUN source /opt/rh/devtoolset-9/enable && \
     ${TF_SERVING_BUILD_OPTIONS} \
     tensorflow_serving/tools/pip_package:build_pip_package && \
     bazel-bin/tensorflow_serving/tools/pip_package/build_pip_package \
-    /tmp/pip && \
-    pip --no-cache-dir install --upgrade \
-    /tmp/pip/tensorflow_serving_api-*.whl && \
-    rm -rf /tmp/pip
+    /tmp/pip
 
 FROM centos:7
-COPY --from=build_image /usr/local/bin/tensorflow_model_server /usr/local/bin/
+COPY --from=build-image /usr/local/bin/tensorflow_model_server /usr/local/bin/
 RUN mkdir -p /opt/whl
-COPY --from=build_image /tmp/pip/tensorflow_serving_api-*.whl /opt/whl
+COPY --from=build-image /tmp/pip/tensorflow_serving_api-*.whl /opt/whl
