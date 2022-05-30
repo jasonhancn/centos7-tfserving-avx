@@ -34,5 +34,6 @@ jobs:
         run: |
           IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
           VERSION=${{ github.run_number }}
-          docker tag $IMAGE_NAME $IMAGE_ID:$TFSERVING_VERSION"."$VERSION
-          docker push $IMAGE_ID:$VERSION
+          IMAGE_TAG=$IMAGE_ID:$TFSERVING_VERSION"."$VERSION
+          docker tag $IMAGE_NAME $IMAGE_TAG
+          docker push IMAGE_TAG
