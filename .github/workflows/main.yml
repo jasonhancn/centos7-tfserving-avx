@@ -36,4 +36,4 @@ jobs:
           VERSION=${{ github.run_number }}
           IMAGE_TAG=$IMAGE_ID:$TFSERVING_VERSION"."$VERSION
           docker tag $IMAGE_NAME $IMAGE_TAG
-          docker push IMAGE_TAG
+          docker push $IMAGE_TAG
