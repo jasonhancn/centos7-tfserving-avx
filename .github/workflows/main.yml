@@ -15,7 +15,7 @@ on:
 
 env:
   IMAGE_NAME: centos7-tfserving-avx
-  TFSERVING_VERSION: 2.8
+  TFSERVING_VERSION: 2.8.0
 
 jobs:
   image:
@@ -34,5 +34,5 @@ jobs:
         run: |
           IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
           VERSION=${{ github.run_number }}
-          docker tag $IMAGE_NAME $IMAGE_ID:$TFSERVING_VERSION".BUILD-"$VERSION
+          docker tag $IMAGE_NAME $IMAGE_ID:$TFSERVING_VERSION"."$VERSION
           docker push $IMAGE_ID:$VERSION
