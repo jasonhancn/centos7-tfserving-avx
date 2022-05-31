@@ -88,7 +88,7 @@ WORKDIR /tensorflow-serving
 RUN curl -sSL --retry 5 https://github.com/tensorflow/serving/tarball/${TF_SERVING_VERSION_GIT_COMMIT} | tar --strip-components=1 -xzf -
 
 # Build, and install TensorFlow Serving
-ARG TF_SERVING_BUILD_OPTIONS="--config=release"
+ARG TF_SERVING_BUILD_OPTIONS="--config=release --jobs=8 --spawn_strategy=local --progress_report_interval=60 --color=no --curses=no --show_timestamps --verbose_failures --output_filter=DONT_MATCH_ANYTHING"
 RUN echo "Building with build options: ${TF_SERVING_BUILD_OPTIONS}"
 # Add Support for AVX (Support from SandyBridge)
 ARG TF_SERVING_BAZEL_OPTIONS="--copt=-msse4.1 --copt=-msse4.2 --copt=-mavx"
@@ -96,10 +96,8 @@ RUN echo "Building with Bazel options: ${TF_SERVING_BAZEL_OPTIONS}"
 
 # Added BAZEL_LINKLIBS=-l%:libstdc++.a due to the issue explained here: https://github.com/tensorflow/serving/issues/1563
 RUN source /opt/rh/devtoolset-9/enable && \
-    BAZEL_LINKLIBS=-l%:libstdc++.a bazel build --color=yes --curses=yes \
+    BAZEL_LINKLIBS=-l%:libstdc++.a bazel build \
     ${TF_SERVING_BAZEL_OPTIONS} \
-    --verbose_failures \
-    --output_filter=DONT_MATCH_ANYTHING \
     ${TF_SERVING_BUILD_OPTIONS} \
     tensorflow_serving/model_servers:tensorflow_model_server && \
     cp bazel-bin/tensorflow_serving/model_servers/tensorflow_model_server \
@@ -107,10 +105,8 @@ RUN source /opt/rh/devtoolset-9/enable && \
 
 # Build and install TensorFlow Serving API
 RUN source /opt/rh/devtoolset-9/enable && \
-    BAZEL_LINKLIBS=-l%:libstdc++.a bazel build --color=yes --curses=yes \
+    BAZEL_LINKLIBS=-l%:libstdc++.a bazel build \
     ${TF_SERVING_BAZEL_OPTIONS} \
-    --verbose_failures \
-    --output_filter=DONT_MATCH_ANYTHING \
     ${TF_SERVING_BUILD_OPTIONS} \
     tensorflow_serving/tools/pip_package:build_pip_package && \
     bazel-bin/tensorflow_serving/tools/pip_package/build_pip_package \
